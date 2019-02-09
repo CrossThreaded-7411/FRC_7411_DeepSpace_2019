@@ -27,16 +27,13 @@ public class RobotMap
    public static final int leftRearDriveMotorPort =1;
    public static final int rightFrontDriveMotorPort = 3;
    public static final int rightRearDriveMotorPort = 2;
-   public static final int leftLiftMotorPort = 6;
-   public static final int rightLiftMotorPort = 7;
-   public static final int grabberMotorPort = 4;
+   public static final int leftGrabberMotorPort = 4;
+   public static final int rightGrabberMotorPort = 5;
+   public static final int vacuumMotor = 6;
    public static final int leftGantryMotorPort = 8;
    public static final int rightGantryMotorPort = 9;
 
-   //Pneumatics Control Module Mapping
-   public static final int solenoid = 1;
-
-
+   
 
    //public static final int  = 6;
    //public static final int  = 7;

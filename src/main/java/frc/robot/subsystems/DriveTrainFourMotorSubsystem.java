@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.DriveManualWithJoystick;;
+import frc.robot.commands.DriveManualWithJoystick;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;

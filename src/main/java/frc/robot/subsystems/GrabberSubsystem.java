@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public class GrabberSubsystem extends Subsystem
 {
-    public VictorSP grabberMotor = new VictorSP(RobotMap.grabberMotorPort);
+    public VictorSP leftGrabberMotor = new VictorSP(RobotMap.leftGrabberMotorPort);
+    public VictorSP rightGrabberMotor = new VictorSP(RobotMap.rightGrabberMotorPort);
 
     public void initDefaultCommand() 
     {
@@ -21,20 +22,24 @@ public class GrabberSubsystem extends Subsystem
     {
         if (Robot.oi.driverStick2.getRawButton(4) == true)
         {
-            grabberMotor.set(-1.0);
+            leftGrabberMotor.set(-1.0);
+            rightGrabberMotor.set(1.0);
         }
         else if (Robot.oi.driverStick2.getRawButton(1) == true)
         {
-            grabberMotor.set(1.0);
+            leftGrabberMotor.set(1.0);
+            rightGrabberMotor.set(-1.0);
         }
         else
         {
-            grabberMotor.set(0);
+            leftGrabberMotor.set(0);
+            rightGrabberMotor.set(0);
         }
     }
 
     public void stopGrabber()
     {
-        grabberMotor.set(0);
+        leftGrabberMotor.set(0);
+        rightGrabberMotor.set(0);
     }
 }

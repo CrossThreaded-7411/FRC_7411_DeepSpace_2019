@@ -30,7 +30,6 @@ public class AutoStop extends Command
    protected void execute()
    {        
       Robot.DriveTrain.driveArcadeAuto(0, 0);
-      Robot.Gantry.driveGantryAuto(0);
    }
 
    // Make this return true when this Command no longer needs to run execute()

@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -14,9 +15,10 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class LiftSubsystem extends Subsystem
 {
-    public VictorSP leftLiftMotor = new VictorSP(RobotMap.leftLiftMotorPort);
-    public VictorSP rightLiftMotor = new VictorSP(RobotMap.rightLiftMotorPort);
-    SpeedControllerGroup liftMotors = new SpeedControllerGroup(leftLiftMotor, rightLiftMotor);
+    public WPI_TalonSRX liftMotor1 = new WPI_TalonSRX(30);
+    public WPI_TalonSRX liftMotor2 = new WPI_TalonSRX(31);
+
+    SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
 
     public Encoder liftEncoder = new Encoder(0,1);
     public int intCount = liftEncoder.get();
