@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveManualWithJoystick;
-
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -45,6 +44,7 @@ public class DriveTrainFourMotorSubsystem extends Subsystem
    public void driveArcade()
    {
       driveBase.arcadeDrive(Robot.oi.getDriver1AxisY(), getRotation(), getSquaredOption());
+      driveBase.setDeadband(0.1);
 
       SmartDashboard.putNumber("Left Power  ", leftFrontMotor.getSpeed());
       SmartDashboard.putNumber("Right Power  ", rightFrontMotor.getSpeed());

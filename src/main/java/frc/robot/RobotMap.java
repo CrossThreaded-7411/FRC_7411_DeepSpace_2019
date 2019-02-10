@@ -25,11 +25,11 @@ public class RobotMap
     *********************************/
    public static final int leftFrontDriveMotorPort = 0;
    public static final int leftRearDriveMotorPort =1;
-   public static final int rightFrontDriveMotorPort = 3;
    public static final int rightRearDriveMotorPort = 2;
+   public static final int rightFrontDriveMotorPort = 3;
    public static final int leftGrabberMotorPort = 4;
    public static final int rightGrabberMotorPort = 5;
-   public static final int vacuumMotor = 6;
+   public static final int vacuumMotorPort = 6;
    public static final int leftGantryMotorPort = 8;
    public static final int rightGantryMotorPort = 9;
 

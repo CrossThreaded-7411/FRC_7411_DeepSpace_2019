@@ -1,11 +1,9 @@
 package frc.robot.subsystems;
 
-import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class GrabberSubsystem extends Subsystem

@@ -1,16 +1,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class LiftSubsystem extends Subsystem
@@ -49,11 +44,6 @@ public class LiftSubsystem extends Subsystem
 
         SmartDashboard.putNumber("Encoder Counts ", intCount);
     }
-
-    // public void driveLiftAuto()
-    // {
-
-    // }
 
     public void stopLift()
     {

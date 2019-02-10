@@ -19,9 +19,11 @@ import frc.robot.commands.AutoDriveForward5Sec;
 import frc.robot.commands.AutoStop;
 import frc.robot.commands.DriveManualWithJoystick;
 import frc.robot.subsystems.DriveTrainFourMotorSubsystem;
-import frc.robot.subsystems.DriveTrainTwoMotorSubsystem;
+//import frc.robot.subsystems.DriveTrainTwoMotorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.PneumaticSubsystem;
+import frc.robot.subsystems.PneumaticSubsystem;
 //import org.usfirst.frc.team7411.robot.subsystems.DriveTrainTwoMotorSubsystem;
 import frc.robot.subsystems.GantrySubsystem;
 
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot
    public static GrabberSubsystem Grabber;
    public static GantrySubsystem Gantry;
    public static OI oi;
+   public static PneumaticSubsystem PressureRelease;
 
    Command autonomousCommand;
    SendableChooser<Command> chooser = new SendableChooser<>();
@@ -53,11 +56,11 @@ public class Robot extends TimedRobot
    public void robotInit()
    {
       oi = new OI();
-      //DriveTrain = new DriveTrainTwoMotorSubsystem();
       DriveTrain = new DriveTrainFourMotorSubsystem();
       Lift = new LiftSubsystem();
       Grabber = new GrabberSubsystem();
       Gantry = new GantrySubsystem();
+      PressureRelease = new PneumaticSubsystem();
       
       // Create camera server to stream video to driver station
       CameraServer.getInstance().startAutomaticCapture();
