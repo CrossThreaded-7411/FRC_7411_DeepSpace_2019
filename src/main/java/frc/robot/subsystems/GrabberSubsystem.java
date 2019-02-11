@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.RobotMap.PWMport;
 import frc.robot.commands.StopCargo;
+
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class GrabberSubsystem extends Subsystem
 {
@@ -13,7 +14,7 @@ public class GrabberSubsystem extends Subsystem
 
    public void initDefaultCommand()
    {
-      setDefaultCommand(new StopCargo());
+      //setDefaultCommand(new StopCargo());
    }
 
 
@@ -39,7 +40,8 @@ public class GrabberSubsystem extends Subsystem
    }
 
 
-   public void stopGrabber() {
+   public void stopGrabber()
+   {
       leftGrabberMotor.set(0);
       rightGrabberMotor.set(0);
    }

@@ -20,15 +20,15 @@ public class RobotMap
     *********************************/
    public enum PWMport
    {
-      leftFrontDriveMotorPort(1),
-      leftRearDriveMotorPort(2),
-      rightRearDriveMotorPort(3),
-      rightFrontDriveMotorPort(4),
-      leftGrabberMotorPort(5),
-      rightGrabberMotorPort(6),
-      vacuumMotorPort(7),
-      leftGantryMotorPort(8),
-      rightGantryMotorPort(9);
+      leftFrontDriveMotorPort(0),
+      leftRearDriveMotorPort(1),
+      rightRearDriveMotorPort(2),
+      rightFrontDriveMotorPort(3),
+      leftGrabberMotorPort(4),
+      rightGrabberMotorPort(5),
+      vacuumMotorPort(6),
+      rightGantryMotorPort(8),
+      leftGantryMotorPort(9);
 
       private int value;
 

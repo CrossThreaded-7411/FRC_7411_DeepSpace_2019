@@ -49,12 +49,12 @@ public class Robot extends TimedRobot
    @Override
    public void robotInit()
    {
-      oi = new OI();
       DriveTrain = new DriveTrainFourMotorSubsystem();
       Lift = new LiftSubsystem();
       Grabber = new GrabberSubsystem();
       Gantry = new GantrySubsystem();
       Pneumatics = new PneumaticSubsystem();
+      oi = new OI();
       
       // Create camera server to stream video to driver station
       //CameraServer.getInstance().startAutomaticCapture();

@@ -20,6 +20,7 @@ public class PneumaticSubsystem extends Subsystem
       setDefaultCommand(new StopPneumatics());
    }
 
+
    public void setPneumaticsForHatchGrab()
    {
       pressureRelease.set(false);
@@ -29,7 +30,7 @@ public class PneumaticSubsystem extends Subsystem
 
    public void setPneumaticsForHatchRelease()
    {
-      pressureRelease.set(false);
+      pressureRelease.set(true);
       vacuum.set(vacuumOff);
    }
 
@@ -37,6 +38,6 @@ public class PneumaticSubsystem extends Subsystem
    public void stopPneumatics()
    {
       pressureRelease.set(false);
-      vacuum.set(vacuumOn);
+      vacuum.set(vacuumOff);
    }
 }   
