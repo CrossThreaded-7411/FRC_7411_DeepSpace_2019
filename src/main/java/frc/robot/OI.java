@@ -4,10 +4,12 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.RobotMap.*;
+import frc.robot.commands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -15,9 +17,21 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI
 {
-   
    public Joystick driverStick1 = new Joystick(0);
    public Joystick driverStick2 = new Joystick(1);
+
+   JoystickButton cargoGrab = new JoystickButton(driverStick1, F310button.Y_Button.getVal());
+   JoystickButton cargoEject = new JoystickButton(driverStick1, F310button.A_Button.getVal());
+
+   JoystickButton hatchGrab = new JoystickButton(driverStick1, F310button.leftTrigger.getVal());
+   JoystickButton hatchDeploy = new JoystickButton(driverStick1, F310button.rightTrigger.getVal());
+
+   public OI()
+   {
+      cargoGrab.whileHeld(new GrabCargo());
+      cargoEject.whenPressed(new EjectCargo());
+   }
+
    
    // Deadband function
    public double deadband(double input, double band) 
@@ -55,25 +69,25 @@ public class OI
    // Button to switch to arcade style driving with Squared feature off
    public boolean getArcadeNormal()
    {
-      return driverStick1.getRawButton(RobotMap.topLeftFrontButton);
+      return driverStick1.getRawButton(Extreme3DButton.topLeftFrontButton.getVal());
    }
    
    // Button to switch to arcade style driving with Squared feature on
    public boolean getArcadeSquared()
    {
-      return driverStick1.getRawButton(RobotMap.topRightFrontButton);
+      return driverStick1.getRawButton(Extreme3DButton.topRightFrontButton.getVal());
    }
    
    // Button to assign steering to x-axis
    public boolean getTurnByAxisX()
    {
-      return driverStick1.getRawButton(RobotMap.topLeftRearButton);
+      return driverStick1.getRawButton(Extreme3DButton.topLeftRearButton.getVal());
    }
    
    // Button to assign steering to z-axis
    public boolean getTurnByAxisZ()
    {
-      return driverStick1.getRawButton(RobotMap.topRightRearButton);
+      return driverStick1.getRawButton(Extreme3DButton.topRightRearButton.getVal());
    }
       
    

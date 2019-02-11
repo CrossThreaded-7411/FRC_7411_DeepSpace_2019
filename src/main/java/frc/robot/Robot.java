@@ -7,24 +7,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.commands.AutoDriveForward5Sec;
-import frc.robot.commands.AutoStop;
 import frc.robot.commands.DriveManualWithJoystick;
 import frc.robot.subsystems.DriveTrainFourMotorSubsystem;
-//import frc.robot.subsystems.DriveTrainTwoMotorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
-import frc.robot.subsystems.PneumaticSubsystem;
-//import org.usfirst.frc.team7411.robot.subsystems.DriveTrainTwoMotorSubsystem;
 import frc.robot.subsystems.GantrySubsystem;
 
 /**
@@ -42,7 +36,7 @@ public class Robot extends TimedRobot
    public static GrabberSubsystem Grabber;
    public static GantrySubsystem Gantry;
    public static OI oi;
-   public static PneumaticSubsystem PressureRelease;
+   public static PneumaticSubsystem Pneumatics;
 
    Command autonomousCommand;
    SendableChooser<Command> chooser = new SendableChooser<>();
@@ -60,15 +54,12 @@ public class Robot extends TimedRobot
       Lift = new LiftSubsystem();
       Grabber = new GrabberSubsystem();
       Gantry = new GantrySubsystem();
-      PressureRelease = new PneumaticSubsystem();
+      Pneumatics = new PneumaticSubsystem();
       
       // Create camera server to stream video to driver station
-      CameraServer.getInstance().startAutomaticCapture();
+      //CameraServer.getInstance().startAutomaticCapture();
 
       SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
-
-      chooser.addDefault("AutoStop", new AutoStop());
-      chooser.addObject("AutoDrive", new AutoDriveForward5Sec());
       SmartDashboard.putData("Auto Mode", chooser);
    }
 

@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import frc.robot.RobotMap.PWMport;
 import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -14,14 +14,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveTrainFourMotorSubsystem extends Subsystem
 {
-
    // Create instances of drivetrain motor PWM controllers and group together as a control groups
-	private VictorSP leftFrontMotor = new VictorSP(RobotMap.leftFrontDriveMotorPort);
-   private VictorSP leftReartMotor = new VictorSP(RobotMap.leftRearDriveMotorPort);
+	private VictorSP leftFrontMotor = new VictorSP(PWMport.leftFrontDriveMotorPort.getVal());
+   private VictorSP leftReartMotor = new VictorSP(PWMport.leftRearDriveMotorPort.getVal());
    SpeedControllerGroup leftDriveMotors = new SpeedControllerGroup(leftFrontMotor, leftReartMotor);
 
-   private VictorSP rightFrontMotor = new VictorSP(RobotMap.rightFrontDriveMotorPort);
-   private VictorSP rightRearMotor = new VictorSP(RobotMap.rightRearDriveMotorPort);
+   private VictorSP rightFrontMotor = new VictorSP(PWMport.rightFrontDriveMotorPort.getVal());
+   private VictorSP rightRearMotor = new VictorSP(PWMport.rightRearDriveMotorPort.getVal());
    SpeedControllerGroup rightDriveMotors = new SpeedControllerGroup(rightFrontMotor, rightRearMotor);
    
 
