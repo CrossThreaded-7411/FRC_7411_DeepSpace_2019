@@ -23,8 +23,7 @@ public class OI
    JoystickButton cargoGrab = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
    JoystickButton cargoEject = new JoystickButton(driverStick2, F310button.A_Button.getVal());
 
-   JoystickButton hatchGrab = new JoystickButton(driverStick2, F310button.leftTrigger.getVal());
-   JoystickButton hatchDeploy = new JoystickButton(driverStick2, F310button.rightTrigger.getVal());
+   JoystickButton hatchPneumatics = new JoystickButton(driverStick2, F310button.leftTrigger.getVal());
 
    public OI()
    {
@@ -33,8 +32,8 @@ public class OI
       cargoEject.whileHeld(new EjectCargo());
 
       // Tie hatch handling commands to joystick buttons
-      hatchGrab.whenPressed(new PrepareToGrabHatch());
-      hatchDeploy.whileHeld(new ReleaseHatch());
+      hatchPneumatics.whenPressed(new ToggleHatchGrabDeploy());
+
    }
 
    

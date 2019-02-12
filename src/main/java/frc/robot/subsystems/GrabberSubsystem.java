@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap.PWMport;
-import frc.robot.commands.StopCargo;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -14,7 +13,8 @@ public class GrabberSubsystem extends Subsystem
 
    public void initDefaultCommand()
    {
-      //setDefaultCommand(new StopCargo());
+      // Not needed as the GrabCargo command is already being initialized
+      // by the joystickbutton method in OI.java
    }
 
 

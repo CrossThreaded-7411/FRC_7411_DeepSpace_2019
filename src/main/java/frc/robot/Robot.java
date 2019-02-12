@@ -35,9 +35,9 @@ public class Robot extends TimedRobot
    public static LiftSubsystem Lift;
    public static GrabberSubsystem Grabber;
    public static GantrySubsystem Gantry;
-   public static OI oi;
    public static PneumaticSubsystem Pneumatics;
-
+   public static OI oi;
+   
    Command autonomousCommand;
    SendableChooser<Command> chooser = new SendableChooser<>();
    

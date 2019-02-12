@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.RobotMap.PWMport;
-import frc.robot.commands.StopPneumatics;
+import frc.robot.commands.ToggleHatchGrabDeploy;
 
 public class PneumaticSubsystem extends Subsystem
 {
@@ -17,7 +17,8 @@ public class PneumaticSubsystem extends Subsystem
    
    public void initDefaultCommand()
    {
-      setDefaultCommand(new StopPneumatics());
+      // Not needed as the ToggleHatchGrabDeploy command is already being initialized
+      // by the joystickbutton method in OI.java
    }
 
 
