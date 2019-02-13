@@ -20,7 +20,7 @@ public class DriveManualWithJoystick extends Command
    protected void initialize()
    {
       Robot.DriveTrain.driveArcadeStop();
-      Robot.Lift.stopLift();
+      Robot.Lift.initLift();
       Robot.Gantry.stopGantry();
       Robot.Gantry.init();
    }
