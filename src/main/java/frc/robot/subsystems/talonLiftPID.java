@@ -38,6 +38,12 @@ public class talonLiftPID extends Subsystem
    WPI_TalonSRX liftMotor1 = new WPI_TalonSRX(30);
    WPI_TalonSRX liftMotor2 = new WPI_TalonSRX(31);
 
+   public enum liftMode 
+   { 
+      down, low, mid, high; 
+   }
+   public liftMode currMode = liftMode.down;
+
    @Override
    public void initDefaultCommand()
    {
@@ -132,12 +138,34 @@ public class talonLiftPID extends Subsystem
    {
       boolean bButton = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
 
-      int targetPosition = LiftPosition.Rocket.cargoLevel1.getVal();
+      int offset = LiftPosition.Rocket.cargoLevel1.getVal();
+      switch(currMode) 
+      {
+         case down:
+            offset = 0;
+            break;
+
+         case low:
+            offset = 3000;
+            break;
+
+         case mid:
+            offset = 6000;
+            break;
+
+         case high:
+            offset = 9000;
+            break;
+
+         default:
+            offset = 0;
+            break;
+      }
 
       if (bButton == true)
       {
-         liftMotor1.set(ControlMode.Position, targetPosition);
-         liftMotor2.set(ControlMode.Follower, kTimeoutMs);
+         liftMotor1.set(ControlMode.Position, offset);
+         liftMotor2.set(ControlMode.Follower, 30);
       }
       else
       {
@@ -148,6 +176,10 @@ public class talonLiftPID extends Subsystem
       SmartDashboard.putNumber("Motor Output", liftMotor1.getMotorOutputPercent());
    }
 
+   public void checkButtons() 
+   {
+
+   }
 
    public void stopPID()
    {

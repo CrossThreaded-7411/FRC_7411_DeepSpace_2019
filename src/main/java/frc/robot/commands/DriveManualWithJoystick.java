@@ -30,7 +30,9 @@ public class DriveManualWithJoystick extends Command
    {
       // Robot.DriveTrain.driveArcade();
       //Robot.Lift.driveLift();
+
       Robot.Lift.PIDLoop();
+      Robot.Lift.checkButtons();
       // Robot.Gantry.driveGantry();
    }
 
