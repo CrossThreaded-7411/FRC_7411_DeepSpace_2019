@@ -20,7 +20,7 @@ public class GantrySubsystem extends Subsystem
 
     public void initDefaultCommand()
     {
-        setDefaultCommand(new DriveManualWithJoystick());
+        //setDefaultCommand(new DriveManualWithJoystick());
     }
 
     public void init()

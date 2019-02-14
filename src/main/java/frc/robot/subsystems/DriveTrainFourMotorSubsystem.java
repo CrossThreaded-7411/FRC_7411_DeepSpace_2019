@@ -33,7 +33,7 @@ public class DriveTrainFourMotorSubsystem extends Subsystem
    // When not other command is running, let driver operator using joystick
    public void initDefaultCommand()
    {
-      setDefaultCommand(new DriveManualWithJoystick());
+      //setDefaultCommand(new DriveManualWithJoystick());
    }
    
      

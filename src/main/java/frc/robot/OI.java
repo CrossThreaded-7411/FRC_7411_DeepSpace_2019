@@ -28,11 +28,11 @@ public class OI
    public OI()
    {
       // Tie cargo handling commands to joystick buttons
-      cargoGrab.whileHeld(new GrabCargo());
-      cargoEject.whileHeld(new EjectCargo());
+      // cargoGrab.whileHeld(new GrabCargo());
+      // cargoEject.whileHeld(new EjectCargo());
 
-      // Tie hatch handling commands to joystick buttons
-      hatchPneumatics.whenPressed(new ToggleHatchGrabDeploy());
+      // // Tie hatch handling commands to joystick buttons
+      // hatchPneumatics.whenPressed(new ToggleHatchGrabDeploy());
 
    }
 

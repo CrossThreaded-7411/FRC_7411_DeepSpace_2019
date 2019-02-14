@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Robot;
 import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Encoder;
+
 
 public class LiftSubsystem extends Subsystem
 {
@@ -22,7 +21,7 @@ public class LiftSubsystem extends Subsystem
 
    public void initDefaultCommand()
    {
-      setDefaultCommand(new DriveManualWithJoystick());
+      //setDefaultCommand(new DriveManualWithJoystick());
    }
 
    public void initLift()
@@ -94,13 +93,13 @@ public class LiftSubsystem extends Subsystem
      */
     private double liftPIDcontrol()
     {
-       double cmdMax = 0.2;
+       double cmdMax = 0.3;
        double cmd = 0.0;
        double setPoint = 3000;
-       double Ki = 0.0015;
+       double Kp = 0.002;
 
        double error = setPoint - liftPosition;
-       cmd = -1 * (Ki * error);
+       cmd = -1 * (Kp * error);
 
        if (Math.abs(cmd) > cmdMax)
        {
