@@ -23,7 +23,7 @@ public class OI
    JoystickButton cargoGrab = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
    JoystickButton cargoEject = new JoystickButton(driverStick2, F310button.A_Button.getVal());
 
-   JoystickButton hatchPneumatics = new JoystickButton(driverStick2, F310button.leftTrigger.getVal());
+   JoystickButton hatchPneumatics = new JoystickButton(driverStick2, F310button.X_Button.getVal());
 
    public OI()
    {

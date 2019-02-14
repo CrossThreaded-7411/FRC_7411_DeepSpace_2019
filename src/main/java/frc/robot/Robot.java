@@ -129,6 +129,7 @@ public class Robot extends TimedRobot
       SmartDashboard.putNumber("Left Trigger Position ", Robot.oi.getLeftTriggerPosition());
       SmartDashboard.putNumber("Right Trigger Position ", Robot.oi.getRightTriggerPosition());
       SmartDashboard.putNumber("Gantry Power", Robot.oi.getDriver2AxisY());
+      SmartDashboard.putBoolean("Ball Sensed:", Robot.Grabber.ballSensor.get());
    }
 
    /**

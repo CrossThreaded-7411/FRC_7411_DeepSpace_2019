@@ -30,7 +30,12 @@ public class GrabCargo extends Command
    @Override
    protected void execute()
    {
-      Robot.Grabber.driveGrabber(grabberMode.grab);
+      if(!Robot.Grabber.ballSensor.get())
+      {
+         Robot.Grabber.driveGrabber(grabberMode.grab);
+      } else {
+         Robot.Grabber.driveGrabber(grabberMode.off);
+      }
    }
 
    // Make this return true when this Command no longer needs to run execute()
