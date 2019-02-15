@@ -20,18 +20,18 @@ public class GantrySubsystem extends Subsystem
 
     public void initDefaultCommand()
     {
-        //setDefaultCommand(new DriveManualWithJoystick());
+        setDefaultCommand(new DriveManualWithJoystick());
     }
 
     public void init()
     {
-        leftLimitSwitch = new DigitalInput(3);
-        rightLimitSwitch = new DigitalInput(2);
+        leftLimitSwitch = new DigitalInput(2);
+        rightLimitSwitch = new DigitalInput(3);
     }
 
     public void driveGantry()
     {
-        double d2yAxis = Robot.oi.driverStick1.getRawAxis(1);
+        double d2yAxis = Robot.oi.driverStick2.getRawAxis(1);
 
         if (leftLimitSwitch.get() == true && d2yAxis > 0)
         {

@@ -25,10 +25,10 @@ public class OI
 
    JoystickButton hatchPneumatics = new JoystickButton(driverStick2, F310button.button8.getVal());
 
-   JoystickButton liftDown = new JoystickButton(driverStick2, F310button.A_Button.getVal());
-   JoystickButton liftLow = new JoystickButton(driverStick2, F310button.X_Button.getVal());
-   JoystickButton liftMid = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
-   JoystickButton liftHigh = new JoystickButton(driverStick2, F310button.B_Button.getVal());
+   public JoystickButton liftDown = new JoystickButton(driverStick2, F310button.A_Button.getVal());
+   public JoystickButton liftLow = new JoystickButton(driverStick2, F310button.X_Button.getVal());
+   public JoystickButton liftMid = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
+   public JoystickButton liftHigh = new JoystickButton(driverStick2, F310button.B_Button.getVal());
 
    public OI()
    {

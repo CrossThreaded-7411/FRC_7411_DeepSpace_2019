@@ -10,9 +10,9 @@ public class LiftPosition
     */
    public enum Rocket
    {
-      cargoLevel1(1000),
-      cargoLevel2(2000),
-      cargoLevel3(3000),
+      cargoLevel1(3000),
+      cargoLevel2(6000),
+      cargoLevel3(9000),
       
       hatchLevel1(1500),
       hatchLevel2(2500),
@@ -27,6 +27,22 @@ public class LiftPosition
 
       public int getVal()
       {
+         return value;
+      }
+   }
+
+   public enum Misc
+   {
+      home(0), load(500);
+
+      private int value;
+
+      private Misc(int value) 
+      {
+         this.value = value;
+      }
+
+      public int getVal() {
          return value;
       }
    }

@@ -55,7 +55,7 @@ public class Robot extends TimedRobot
       //Lift = new LiftSubsystem();
       Lift = new talonLiftPID();
       //Grabber = new GrabberSubsystem();
-      //Gantry = new GantrySubsystem();
+      Gantry = new GantrySubsystem();
       //Pneumatics = new PneumaticSubsystem();
       oi = new OI();
       
