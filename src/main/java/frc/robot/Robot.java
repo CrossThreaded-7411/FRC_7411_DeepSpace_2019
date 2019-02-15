@@ -7,7 +7,9 @@
 
 package frc.robot;
 
-//import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.cscore.UsbCamera;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -59,7 +61,9 @@ public class Robot extends TimedRobot
       oi = new OI();
       
       // Create camera server to stream video to driver station
-      //CameraServer.getInstance().startAutomaticCapture();
+      
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera.setResolution(640, 480);
 
       //SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
       //SmartDashboard.putData("Auto Mode", chooser);

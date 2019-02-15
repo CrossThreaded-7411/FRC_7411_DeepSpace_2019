@@ -30,6 +30,9 @@ public class DriveTrainFourMotorSubsystem extends Subsystem
    private boolean steerByZAxis = false;
    private boolean squaredFlag = false;
 
+   private double maxHeight = 0;
+   private double maxPower = 0;
+
    // When not other command is running, let driver operator using joystick
    public void initDefaultCommand()
    {
@@ -42,7 +45,10 @@ public class DriveTrainFourMotorSubsystem extends Subsystem
     */
    public void driveArcade()
    {
-      driveBase.arcadeDrive(Robot.oi.getDriver1AxisY(), getRotation(), getSquaredOption());
+      maxHeight = Robot.Lift.percentMaxHeight();
+      maxPower = -0.70 * maxHeight + 1;
+
+      driveBase.arcadeDrive(Robot.oi.getDriver1AxisY() * maxPower, getRotation() * maxPower, getSquaredOption());
       driveBase.setDeadband(0.1);
 
       SmartDashboard.putNumber("Left Power  ", leftFrontMotor.getSpeed());

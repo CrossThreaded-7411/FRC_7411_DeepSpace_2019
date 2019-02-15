@@ -28,8 +28,8 @@ public class GrabberSubsystem extends Subsystem
       switch(mode)
       {
          case grab:
-            leftGrabberMotor.set(0.75);
-            rightGrabberMotor.set(-0.75);
+            leftGrabberMotor.set(1.0);
+            rightGrabberMotor.set(-1.0);
             break;
 
          case eject:

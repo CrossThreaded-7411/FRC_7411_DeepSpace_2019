@@ -65,6 +65,8 @@ public class talonLiftPID extends Subsystem
    private boolean switchMode = false;
    private boolean switchModeLast = false;
 
+   double liftPosition = 0;
+
    int offset = 0;
 
 
@@ -162,6 +164,7 @@ public class talonLiftPID extends Subsystem
    {
       boolean bButton = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
 
+      liftPosition = -1 * liftMotor1.getSensorCollection().getQuadraturePosition();
       switch(currMode) 
       {
          case down:
@@ -212,13 +215,15 @@ public class talonLiftPID extends Subsystem
       {
          currMode = liftMode.manual;
          stopPID();
-         offset = -1 * liftMotor1.getSensorCollection().getQuadraturePosition(); // Negative quadrature position is what the PID sees
+         offset = (int)liftPosition; // Negative quadrature position is what the PID sees
          liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(5));
          liftMotor2.set(ControlMode.Follower, 30);
       }
 
       SmartDashboard.putNumber("Motor Pos", liftMotor1.getSensorCollection().getQuadraturePosition());
       SmartDashboard.putNumber("Motor Output", liftMotor1.getMotorOutputPercent());
+      SmartDashboard.putNumber("PercentMaxHeight", percentMaxHeight());
+
    }
 
    public void checkLiftButtons() 
@@ -237,7 +242,7 @@ public class talonLiftPID extends Subsystem
          }
       }
 
-      if(lastDown == true && down == false && currCargoMode == cargoMode.ball) {
+      if(lastDown == true && down == false) {
           currMode = liftMode.down;
       } else if(lastLow == true && low == false && currCargoMode == cargoMode.ball) {
          currMode = liftMode.lowBall;
@@ -265,10 +270,18 @@ public class talonLiftPID extends Subsystem
       } else if(currCargoMode == cargoMode.ball) {
          SmartDashboard.putString("Mode", "Ball");
       }
+
    }
 
    public void stopPID()
    {
       liftMotor1.stopMotor();
    }
+
+   public double percentMaxHeight() {
+
+      return (double)liftPosition / (double)(LiftPosition.Rocket.cargoLevel3.getVal());
+      
+   }
+
 }
