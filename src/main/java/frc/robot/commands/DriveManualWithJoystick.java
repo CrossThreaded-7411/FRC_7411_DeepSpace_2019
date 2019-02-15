@@ -11,7 +11,7 @@ public class DriveManualWithJoystick extends Command
    public DriveManualWithJoystick()
    {
       // Required to declare subsystem dependencies
-      // requires(Robot.DriveTrain);                                                                                                                                                                                                                                         
+      requires(Robot.DriveTrain);                                                                                                                                                                                                                                         
       requires(Robot.Lift);
       requires(Robot.Gantry);
    }
@@ -19,7 +19,7 @@ public class DriveManualWithJoystick extends Command
    // Called just before this Command runs the first time
    protected void initialize()
    {
-      //Robot.DriveTrain.driveArcadeStop();
+      Robot.DriveTrain.driveArcadeStop();
       Robot.Lift.initLift();
       Robot.Gantry.stopGantry();
       Robot.Gantry.init();
@@ -28,9 +28,7 @@ public class DriveManualWithJoystick extends Command
    // Called repeatedly when this Command is scheduled to run
    protected void execute()
    {
-      // Robot.DriveTrain.driveArcade();
-      //Robot.Lift.driveLift();
-
+      Robot.DriveTrain.driveArcade();
       Robot.Lift.PIDLoop();
       Robot.Lift.checkLiftButtons();
       Robot.Gantry.driveGantry();
@@ -45,7 +43,7 @@ public class DriveManualWithJoystick extends Command
    // Called once after isFinished returns true
    protected void end()
    {
-      // Robot.DriveTrain.driveArcadeStop();
+      Robot.DriveTrain.driveArcadeStop();
       Robot.Lift.stopPID();
       Robot.Gantry.stopGantry();
    }

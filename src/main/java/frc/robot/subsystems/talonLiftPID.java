@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap.F310button;
+import frc.robot.RobotMap.F310axis;
 import frc.robot.commands.DriveManualWithJoystick;
 import frc.robot.LiftPosition;
 
@@ -40,10 +41,17 @@ public class talonLiftPID extends Subsystem
 
    public enum liftMode 
    { 
-      down, low, mid, high; 
+      down, home, lowBall, midBall, highBall, load, midHatch, highHatch, manual; 
    }
-   liftMode currMode = liftMode.down;
 
+   public enum cargoMode 
+   {
+      ball, hatch;
+   }
+
+   liftMode currMode = liftMode.down;
+   cargoMode currCargoMode = cargoMode.ball;
+   
    private boolean lastDown = false;
    private boolean lastLow = false;
    private boolean lastMid = false;
@@ -53,6 +61,12 @@ public class talonLiftPID extends Subsystem
    private boolean low = false;
    private boolean mid = false;
    private boolean high = false;
+
+   private boolean switchMode = false;
+   private boolean switchModeLast = false;
+
+   int offset = 0;
+
 
    @Override
    public void initDefaultCommand()
@@ -66,14 +80,14 @@ public class talonLiftPID extends Subsystem
       final int kTimeoutMs = 30;                   // Time to wait for Talon to finish config updates
       final boolean kSensorPhase = false;          // Used to set correct sign of sensor measurement
       final boolean kMotorInvert = true;           // Used to invert motor direction compared to command
-      final double kP = 0.25;                       // Proportional gain
-      final double kI = 0.00002;                   // Integral gain
-      final double kD = 10;                        // Differential gain
+      final double kP = 0.5;                       // Proportional gain
+      final double kI = 0;                         // Integral gain
+      final double kD = 0;                        // Differential gain
       final double kF = 0.0;                       // Feedforward gain
       // int kIzone = 0;
-      final double peakPowerRaise = 0.8;           // Control loop power command saturates at this limit on raise
-      final double peakPowerLower = -0.6;          // Control loop power command saturates at this limit on lower
-      final double neutralToFullRampRate = 2.0;    // Time in seconds control will ramp from neutral to full power
+      final double peakPowerRaise = 1.0;           // Control loop power command saturates at this limit on raise
+      final double peakPowerLower = -0.4;          // Control loop power command saturates at this limit on lower
+      final double neutralToFullRampRate = 0.5;    // Time in seconds control will ramp from neutral to full power
 
       /* Config the sensor used for Primary PID and sensor direction */
       liftMotor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
@@ -148,23 +162,38 @@ public class talonLiftPID extends Subsystem
    {
       boolean bButton = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
 
-      int offset;
       switch(currMode) 
       {
          case down:
             offset = LiftPosition.Misc.home.getVal(); // This is the lowest position
             break;
 
-         case low:
+         case lowBall:
             offset = LiftPosition.Rocket.cargoLevel1.getVal(); // This is the first ball position
             break;
 
-         case mid:
+         case midBall:
             offset = LiftPosition.Rocket.cargoLevel2.getVal(); // This is the middle ball position
             break;
 
-         case high:
+         case highBall:
             offset = LiftPosition.Rocket.cargoLevel3.getVal(); // This is the high ball position
+            break;
+
+         case highHatch:
+            offset = LiftPosition.Rocket.hatchLevel3.getVal();
+            break;
+         
+         case midHatch:
+            offset = LiftPosition.Rocket.hatchLevel2.getVal();
+            break;
+
+         case load:
+            offset = LiftPosition.Rocket.hatchLevel1.getVal();
+            break;
+
+         case manual:
+            offset = offset;
             break;
 
          default:
@@ -172,18 +201,23 @@ public class talonLiftPID extends Subsystem
             break;
       }
 
+      
       SmartDashboard.putNumber("Offset", offset);
-      // if (bButton == true)
-      // {
+      if (Math.abs(Robot.oi.driverStick2.getRawAxis(5)) < 0.1)
+      {
          liftMotor1.set(ControlMode.Position, offset);
          liftMotor2.set(ControlMode.Follower, 30);
-      // }
-      // else
-      // {
-      //    stopPID();
-      // }
+      }
+      else
+      {
+         currMode = liftMode.manual;
+         stopPID();
+         offset = -1 * liftMotor1.getSensorCollection().getQuadraturePosition(); // Negative quadrature position is what the PID sees
+         liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(5));
+         liftMotor2.set(ControlMode.Follower, 30);
+      }
 
-      SmartDashboard.putNumber("Motor Pos", liftMotor1.getSensorCollection().getPulseWidthPosition());
+      SmartDashboard.putNumber("Motor Pos", liftMotor1.getSensorCollection().getQuadraturePosition());
       SmartDashboard.putNumber("Motor Output", liftMotor1.getMotorOutputPercent());
    }
 
@@ -193,21 +227,44 @@ public class talonLiftPID extends Subsystem
       low = Robot.oi.driverStick2.getRawButton(F310button.X_Button.getVal());
       mid = Robot.oi.driverStick2.getRawButton(F310button.Y_Button.getVal());
       high = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
-      
-      if(lastDown == true && down == false) {
+      switchMode = Robot.oi.driverStick2.getRawButton(F310button.button7.getVal());
+
+      if(switchModeLast == true && switchMode == false) {
+         if(currCargoMode == cargoMode.ball) {
+            currCargoMode = cargoMode.hatch;
+         } else if(currCargoMode == cargoMode.hatch) {
+            currCargoMode = cargoMode.ball;
+         }
+      }
+
+      if(lastDown == true && down == false && currCargoMode == cargoMode.ball) {
           currMode = liftMode.down;
-      } else if(lastLow == true && low == false) {
-         currMode = liftMode.low;
-      } else if(lastMid == true && mid == false) {
-         currMode = liftMode.mid;
-      } else if(lastHigh == true && high == false) {
-         currMode = liftMode.high;
+      } else if(lastLow == true && low == false && currCargoMode == cargoMode.ball) {
+         currMode = liftMode.lowBall;
+      } else if(lastMid == true && mid == false && currCargoMode == cargoMode.ball) {
+         currMode = liftMode.midBall;
+      } else if(lastHigh == true && high == false && currCargoMode == cargoMode.ball) {
+         currMode = liftMode.highBall;
+      } else if(lastLow == true && low == false && currCargoMode == cargoMode.hatch){
+         currMode = liftMode.load;
+      } else if(lastMid == true && mid == false && currCargoMode == cargoMode.hatch) {
+         currMode = liftMode.midHatch;
+      } else if(lastHigh == true & high == false && currCargoMode == cargoMode.hatch){
+         currMode = liftMode.highHatch;
       }
 
       lastDown = down;
       lastLow = low;
       lastMid = mid;
       lastHigh = high;
+      switchModeLast = switchMode;
+
+      if(currCargoMode == cargoMode.hatch)
+      {
+         SmartDashboard.putString("Mode", "Hatch");
+      } else if(currCargoMode == cargoMode.ball) {
+         SmartDashboard.putString("Mode", "Ball");
+      }
    }
 
    public void stopPID()

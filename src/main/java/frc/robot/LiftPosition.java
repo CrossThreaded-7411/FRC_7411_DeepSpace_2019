@@ -10,13 +10,13 @@ public class LiftPosition
     */
    public enum Rocket
    {
-      cargoLevel1(3000),
-      cargoLevel2(6000),
-      cargoLevel3(9000),
+      cargoLevel1(7756),
+      cargoLevel2(14496),
+      cargoLevel3(21040),
       
-      hatchLevel1(1500),
-      hatchLevel2(2500),
-      hatchLevel3(3500);
+      hatchLevel1(4032),
+      hatchLevel2(11307),
+      hatchLevel3(18147);
 
       private int value;
 

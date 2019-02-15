@@ -30,14 +30,15 @@ public class OI
    public JoystickButton liftMid = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
    public JoystickButton liftHigh = new JoystickButton(driverStick2, F310button.B_Button.getVal());
 
+
    public OI()
    {
       // Tie cargo handling commands to joystick buttons
-      // cargoGrab.whileHeld(new GrabCargo());
-      // cargoEject.whileHeld(new EjectCargo());
+       cargoGrab.whileHeld(new GrabCargo());
+       cargoEject.whileHeld(new EjectCargo());
 
       // // Tie hatch handling commands to joystick buttons
-      // hatchPneumatics.whenPressed(new ToggleHatchGrabDeploy());
+      hatchPneumatics.whenPressed(new ToggleHatchGrabDeploy());
 
 
    }

@@ -31,7 +31,6 @@ import frc.robot.subsystems.GantrySubsystem;
  */
 public class Robot extends TimedRobot
 {
-   //public static DriveTrainTwoMotorSubsystem DriveTrain;
    public static DriveTrainFourMotorSubsystem DriveTrain;
    //public static LiftSubsystem Lift;
    public static talonLiftPID Lift;
@@ -51,12 +50,12 @@ public class Robot extends TimedRobot
    @Override
    public void robotInit()
    {
-      //DriveTrain = new DriveTrainFourMotorSubsystem();
+      DriveTrain = new DriveTrainFourMotorSubsystem();
       //Lift = new LiftSubsystem();
       Lift = new talonLiftPID();
-      //Grabber = new GrabberSubsystem();
+      Grabber = new GrabberSubsystem();
       Gantry = new GantrySubsystem();
-      //Pneumatics = new PneumaticSubsystem();
+      Pneumatics = new PneumaticSubsystem();
       oi = new OI();
       
       // Create camera server to stream video to driver station
@@ -132,6 +131,7 @@ public class Robot extends TimedRobot
       SmartDashboard.putNumber("Left Trigger Position ", Robot.oi.getLeftTriggerPosition());
       SmartDashboard.putNumber("Right Trigger Position ", Robot.oi.getRightTriggerPosition());
       SmartDashboard.putNumber("Gantry Power", Robot.oi.getDriver2AxisY());
+      SmartDashboard.putBoolean("Ball Sensed:", Robot.Grabber.ballSensor.get());
    }
 
    /**
