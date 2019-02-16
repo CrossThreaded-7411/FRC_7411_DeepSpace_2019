@@ -46,6 +46,7 @@ public class DriveManualWithJoystick extends Command
       Robot.DriveTrain.driveArcadeStop();
       Robot.Lift.stopPID();
       Robot.Gantry.stopGantry();
+      Robot.Lift.resetLift();
    }
 
    // Called when another command which requires one or more of the same

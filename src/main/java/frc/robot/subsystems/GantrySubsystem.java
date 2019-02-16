@@ -31,7 +31,7 @@ public class GantrySubsystem extends Subsystem
 
     public void driveGantry()
     {
-        double d2yAxis = Robot.oi.driverStick2.getRawAxis(1);
+        double d2yAxis = Robot.oi.driverStick2.getRawAxis(5);
 
         if (leftLimitSwitch.get() == true && d2yAxis > 0)
         {

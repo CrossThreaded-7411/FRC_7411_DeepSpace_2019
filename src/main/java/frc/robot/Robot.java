@@ -64,6 +64,7 @@ public class Robot extends TimedRobot
       
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
       camera.setResolution(640, 480);
+      
 
       //SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
       //SmartDashboard.putData("Auto Mode", chooser);
@@ -121,6 +122,8 @@ public class Robot extends TimedRobot
          autonomousCommand.cancel();
          
       }
+      Lift.initLift();
+      Lift.resetLift();
    }
 
    /**

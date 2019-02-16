@@ -78,6 +78,10 @@ public class talonLiftPID extends Subsystem
 
    public void initLift()
    {
+      offset = 0;
+      liftPosition = 0;
+      currMode = liftMode.down;
+      currCargoMode = cargoMode.ball;
       final int kPIDLoopIdx = 0;                   //
       final int kTimeoutMs = 30;                   // Time to wait for Talon to finish config updates
       final boolean kSensorPhase = false;          // Used to set correct sign of sensor measurement
@@ -206,7 +210,7 @@ public class talonLiftPID extends Subsystem
 
       
       SmartDashboard.putNumber("Offset", offset);
-      if (Math.abs(Robot.oi.driverStick2.getRawAxis(5)) < 0.1)
+      if (Math.abs(Robot.oi.driverStick2.getRawAxis(1)) < 0.1)
       {
          liftMotor1.set(ControlMode.Position, offset);
          liftMotor2.set(ControlMode.Follower, 30);
@@ -216,7 +220,7 @@ public class talonLiftPID extends Subsystem
          currMode = liftMode.manual;
          stopPID();
          offset = (int)liftPosition; // Negative quadrature position is what the PID sees
-         liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(5));
+         liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
          liftMotor2.set(ControlMode.Follower, 30);
       }
 
@@ -282,6 +286,13 @@ public class talonLiftPID extends Subsystem
 
       return (double)liftPosition / (double)(LiftPosition.Rocket.cargoLevel3.getVal());
       
+   }
+
+   public void resetLift() {
+      offset = 0;
+      currMode = liftMode.down;
+      currCargoMode = cargoMode.ball;
+      liftPosition = 0;
    }
 
 }
