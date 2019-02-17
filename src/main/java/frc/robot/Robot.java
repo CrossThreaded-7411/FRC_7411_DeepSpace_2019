@@ -65,6 +65,7 @@ public class Robot extends TimedRobot
    CvSource outputStream;
    Scalar lowerBounds = new Scalar(10,0,252);
    Scalar upperBounds = new Scalar(50,30,255);
+   Scalar zero = new Scalar(0,0,0);
    int mode = 0;
    int method = 1;
    int largest = 0;
@@ -127,7 +128,7 @@ public class Robot extends TimedRobot
                }
 
                Rect rect = Imgproc.boundingRect(contours.get(largest));
-               Imgproc.rectangle(rectPic, new Point(30, 30), new Point(250, 250), new Scalar(0,0,255));
+               Imgproc.rectangle(rectPic, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255,255,255), 3);
 
                System.out.print(Imgproc.contourArea(contours.get(largest)));
                System.out.print(" ");
@@ -139,6 +140,9 @@ public class Robot extends TimedRobot
             outputStream.putFrame(rectPic);
 
             contours.clear();
+            pic.release();
+            out.release();
+            rectPic.setTo(zero);
          }
       });
       cameraThread.start();
