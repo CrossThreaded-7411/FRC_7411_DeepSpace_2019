@@ -7,8 +7,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
+import org.opencv.core.Mat;
+import org.opencv.osgi.OpenCVInterface;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.core.Point;
+import java.util.List;
+import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,6 +38,9 @@ import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.talonLiftPID;
 import frc.robot.subsystems.GantrySubsystem;
+
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableEntry;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -40,6 +58,19 @@ public class Robot extends TimedRobot
    public static GantrySubsystem Gantry;
    public static PneumaticSubsystem Pneumatics;
    public static OI oi;
+
+   //NetworkTableEntry grip;
+   UsbCamera camera;
+   CvSink cvSink;
+   CvSource outputStream;
+   Scalar lowerBounds = new Scalar(10,0,252);
+   Scalar upperBounds = new Scalar(50,30,255);
+   int mode = 0;
+   int method = 1;
+   int largest = 0;
+   
+
+   
    
    Command autonomousCommand;
    SendableChooser<Command> chooser = new SendableChooser<>();
@@ -59,11 +90,64 @@ public class Robot extends TimedRobot
       Gantry = new GantrySubsystem();
       Pneumatics = new PneumaticSubsystem();
       oi = new OI();
+
+
       
       // Create camera server to stream video to driver station
+
+      Thread cameraThread = new Thread(() ->
+      {
+         List<MatOfPoint> contours = new ArrayList<>();
+
+         camera = CameraServer.getInstance().startAutomaticCapture();
+         camera.setResolution(640, 480);
+
+         CvSink cvSink = CameraServer.getInstance().getVideo();
+         CvSource outputStream = CameraServer.getInstance().putVideo("Output", 640, 480);
+
+         Mat pic = new Mat();
+         Mat out = new Mat();
+         Mat rectPic = new Mat(480, 640, CvType.CV_64F);
+         while(true) {
+            largest = 0;
+            if(cvSink.grabFrame(pic) == 0) {
+               outputStream.notifyError(cvSink.getError());
+               continue;
+            }
+            Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2HSV);
+            Core.inRange(pic, lowerBounds, upperBounds, pic);
+            Imgproc.findContours(pic, contours, out, mode, method);
+
+            if(contours.size() > 0){
+               for(int i = 0; i < contours.size() - 1; i++)
+               {
+                  if(Imgproc.contourArea(contours.get(i)) > Imgproc.contourArea(contours.get(largest))) {
+                     largest = i;
+                  }
+               }
+
+               Rect rect = Imgproc.boundingRect(contours.get(largest));
+               Imgproc.rectangle(rectPic, new Point(30, 30), new Point(250, 250), new Scalar(0,0,255));
+
+               System.out.print(Imgproc.contourArea(contours.get(largest)));
+               System.out.print(" ");
+               System.out.println(rect.x + rect.width/2);
+
+            }
+
+
+            outputStream.putFrame(rectPic);
+
+            contours.clear();
+         }
+      });
+      cameraThread.start();
+
+
+      //NetworkTableInstance inst = NetworkTableInstance.getDefault();
+      //NetworkTable table = inst.getTable("datatable");
       
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
+      //grip = table.getEntry("GRIP");
       
 
       //SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
@@ -140,6 +224,8 @@ public class Robot extends TimedRobot
       SmartDashboard.putNumber("Gantry Power", Robot.oi.getDriver2AxisY());
       SmartDashboard.putBoolean("Ball Sensed:", Robot.Grabber.ballSensor.get());
    }
+
+   
 
    /**
     * This function is called periodically during test mode.
