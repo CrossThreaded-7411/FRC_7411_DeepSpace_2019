@@ -42,6 +42,8 @@ import frc.robot.subsystems.GantrySubsystem;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
+import java.lang.Runtime;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -51,6 +53,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
  */
 public class Robot extends TimedRobot
 {
+   Runtime run = Runtime.getRuntime();
    public static DriveTrainFourMotorSubsystem DriveTrain;
    //public static LiftSubsystem Lift;
    public static talonLiftPID Lift;
@@ -65,10 +68,17 @@ public class Robot extends TimedRobot
    CvSource outputStream;
    Scalar lowerBounds = new Scalar(10,0,252);
    Scalar upperBounds = new Scalar(50,30,255);
+
+   Point crop1 = new Point(60, 0);
+   Point crop2 = new Point(290, 240);
+   Rect rectCrop = new Rect((int)crop1.x, (int)crop1.y, 200, 240);
+
    Scalar zero = new Scalar(0,0,0);
    int mode = 0;
    int method = 1;
    int largest = 0;
+
+   static Mat pic = new Mat();
    
 
    
@@ -96,54 +106,87 @@ public class Robot extends TimedRobot
       
       // Create camera server to stream video to driver station
 
-      Thread cameraThread = new Thread(() ->
-      {
-         List<MatOfPoint> contours = new ArrayList<>();
+       Thread cameraThread = new Thread(() ->
+       {
+          List<MatOfPoint> contours = new ArrayList<>();
 
-         camera = CameraServer.getInstance().startAutomaticCapture();
-         camera.setResolution(640, 480);
+          camera = CameraServer.getInstance().startAutomaticCapture();
+          camera.setResolution(320, 240);
 
-         CvSink cvSink = CameraServer.getInstance().getVideo();
-         CvSource outputStream = CameraServer.getInstance().putVideo("Output", 640, 480);
+          CvSink cvSink = CameraServer.getInstance().getVideo();
+          CvSource outputStream = CameraServer.getInstance().putVideo("Output", 320, 240);
 
-         Mat pic = new Mat();
+         Mat orig = new Mat();
+         //Mat pic = new Mat();
          Mat out = new Mat();
-         Mat rectPic = new Mat(480, 640, CvType.CV_64F);
-         while(true) {
-            largest = 0;
-            if(cvSink.grabFrame(pic) == 0) {
-               outputStream.notifyError(cvSink.getError());
-               continue;
-            }
-            Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2HSV);
-            Core.inRange(pic, lowerBounds, upperBounds, pic);
-            Imgproc.findContours(pic, contours, out, mode, method);
+         Mat rectPic = new Mat(320, 240, CvType.CV_64F);
+         Point rect1 = new Point(0,0);
+         Point rect2 = new Point(0,0);
+         Rect rectangleBound;
+         double[] rectCoordinates1 = {0,0};
+         double[] rectCoordinates2 = {0,0};
+         Scalar lineColor = new Scalar(255,255,255);
+         int gcIterator = 0;
+          while(true) {
+             largest = 0;
+             if(cvSink.grabFrame(pic) == 0) {
+                outputStream.notifyError(cvSink.getError());
+                continue;
+             }
+             pic = pic.submat(rectCrop);            
+      //       Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2HSV);
+      //       Core.inRange(pic, lowerBounds, upperBounds, pic);
+      //       Imgproc.findContours(pic, contours, out, mode, method);
 
-            if(contours.size() > 0){
-               for(int i = 0; i < contours.size() - 1; i++)
-               {
-                  if(Imgproc.contourArea(contours.get(i)) > Imgproc.contourArea(contours.get(largest))) {
-                     largest = i;
-                  }
-               }
+      //       if(contours.size() > 0){
+      //          for(int i = 0; i < contours.size() - 1; i++)
+      //          {
+      //             if(Imgproc.contourArea(contours.get(i)) > Imgproc.contourArea(contours.get(largest))) {
+      //             largest = i;
+      //             }
+      //          }
+            
 
-               Rect rect = Imgproc.boundingRect(contours.get(largest));
-               Imgproc.rectangle(rectPic, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255,255,255), 3);
+      //          rectangleBound = Imgproc.boundingRect(contours.get(largest));
 
-               System.out.print(Imgproc.contourArea(contours.get(largest)));
-               System.out.print(" ");
-               System.out.println(rect.x + rect.width/2);
+      //          rectCoordinates1[0] = rectangleBound.x;
+      //          rectCoordinates1[1] = rectangleBound.y;
+      //          rectCoordinates2[0] = rectangleBound.x+rectangleBound.width;
+      //          rectCoordinates2[1] = rectangleBound.y+rectangleBound.height;
+      //          rect1.set(rectCoordinates1);
+      //          rect2.set(rectCoordinates2);
 
-            }
+      //          Imgproc.rectangle(pic, rect1, rect2, lineColor, 3);
 
+      //          System.out.print(Imgproc.contourArea(contours.get(largest)));
+      //          System.out.print(" ");
+      //          System.out.print(rectangleBound.x + rectangleBound.width/2);
+      //          System.out.print(" ");
 
-            outputStream.putFrame(rectPic);
+      //       }
 
-            contours.clear();
-            pic.release();
-            out.release();
-            rectPic.setTo(zero);
-         }
+             System.out.println(run.freeMemory());
+
+         //    outputStream.putFrame(pic);
+
+         //    contours.clear();
+            
+         //    pic.setTo(zero);
+             pic.release();
+         //    out.release();
+         //    orig.release();
+         //    rectPic.setTo(zero);
+         //    rectPic.release();
+         // gcIterator++;
+         // if(gcIterator == 100) {
+         //    System.gc();
+         //    gcIterator = 0;
+         // }
+         // try{ 
+         //    Thread.sleep(50);
+         // } catch(InterruptedException e) {}
+
+          }
       });
       cameraThread.start();
 
