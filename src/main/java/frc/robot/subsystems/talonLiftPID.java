@@ -88,7 +88,7 @@ public class talonLiftPID extends Subsystem
       final boolean kMotorInvert = true;           // Used to invert motor direction compared to command
       final double kP = 0.5;                       // Proportional gain
       final double kI = 0;                         // Integral gain
-      final double kD = 0;                        // Differential gain
+      final double kD = 0;                         // Differential gain
       final double kF = 0.0;                       // Feedforward gain
       // int kIzone = 0;
       final double peakPowerRaise = 1.0;           // Control loop power command saturates at this limit on raise
@@ -159,7 +159,6 @@ public class talonLiftPID extends Subsystem
        liftMotor1.configClosedloopRamp(neutralToFullRampRate, kTimeoutMs);
    }
 
-
    /**
     * General periodic task for updating PID control information on the Talon and
     * whatever else needs to be done while running the lift
@@ -200,7 +199,6 @@ public class talonLiftPID extends Subsystem
             break;
 
          case manual:
-            offset = offset;
             break;
 
          default:
@@ -219,9 +217,10 @@ public class talonLiftPID extends Subsystem
       {
          currMode = liftMode.manual;
          stopPID();
-         offset = (int)liftPosition; // Negative quadrature position is what the PID sees
          liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
          liftMotor2.set(ControlMode.Follower, 30);
+         offset = (int)liftPosition;
+         // Negative quadrature position is what the PID sees
       }
 
       SmartDashboard.putNumber("Motor Pos", liftMotor1.getSensorCollection().getQuadraturePosition());
@@ -274,7 +273,6 @@ public class talonLiftPID extends Subsystem
       } else if(currCargoMode == cargoMode.ball) {
          SmartDashboard.putString("Mode", "Ball");
       }
-
    }
 
    public void stopPID()
@@ -282,17 +280,16 @@ public class talonLiftPID extends Subsystem
       liftMotor1.stopMotor();
    }
 
-   public double percentMaxHeight() {
-
+   public double percentMaxHeight() 
+   {
       return (double)liftPosition / (double)(LiftPosition.Rocket.cargoLevel3.getVal());
-      
    }
 
-   public void resetLift() {
+   public void resetLift() 
+   {
       offset = 0;
       currMode = liftMode.down;
       currCargoMode = cargoMode.ball;
       liftPosition = 0;
    }
-
 }

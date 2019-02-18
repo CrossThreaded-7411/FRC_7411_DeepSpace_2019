@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GantrySubsystem extends Subsystem
 {
-    private VictorSP leftGantryMotor = new VictorSP(PWMport.leftGantryMotorPort.getVal());
-    private VictorSP rightGantryMotor = new VictorSP(PWMport.rightGantryMotorPort.getVal());
+    private VictorSP gantryMotor = new VictorSP(PWMport.gantryMotorPort.getVal());
 
     //limit switches
-    public DigitalInput leftLimitSwitch;
-    public DigitalInput rightLimitSwitch;
+    public DigitalInput limitSwitch;
 
     public void initDefaultCommand()
     {
@@ -25,54 +23,32 @@ public class GantrySubsystem extends Subsystem
 
     public void init()
     {
-        leftLimitSwitch = new DigitalInput(2);
-        rightLimitSwitch = new DigitalInput(3);
+        limitSwitch = new DigitalInput(2);
     }
 
     public void driveGantry()
     {
         double d2yAxis = Robot.oi.driverStick2.getRawAxis(5);
 
-        if (leftLimitSwitch.get() == true && d2yAxis > 0)
+        if (limitSwitch.get() == true && d2yAxis > 0)
         {
-            leftGantryMotor.set(0);
+            gantryMotor.set(0);
         }
         else
         {
             if (Math.abs(d2yAxis) > 0.1)
             {
-                leftGantryMotor.set(-d2yAxis);
+            gantryMotor.set(-d2yAxis);
             }
             else
             {
-                leftGantryMotor.set(0);
+                gantryMotor.set(0);
             }
         }
-        
-        if (rightLimitSwitch.get() == true && d2yAxis > 0)
-        {
-            rightGantryMotor.set(0);
-        }
-        else
-        {
-            if (Math.abs(d2yAxis) > 0.1)
-            {
-                rightGantryMotor.set(-d2yAxis);
-            }
-            else
-            {
-                rightGantryMotor.set(0);
-            }
-        }
-
-        SmartDashboard.putNumber("Left Power  ", leftGantryMotor.getSpeed());
-        SmartDashboard.putNumber("Right Power  ", rightGantryMotor.getSpeed());
-
     }
 
     public void stopGantry()
     {
-        leftGantryMotor.set(0);
-        rightGantryMotor.set(0);
+        gantryMotor.set(0);
     }
 }

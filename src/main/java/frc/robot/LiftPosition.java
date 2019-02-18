@@ -33,7 +33,8 @@ public class LiftPosition
 
    public enum Misc
    {
-      home(0), load(500);
+      home(0), 
+      load(500);
 
       private int value;
 

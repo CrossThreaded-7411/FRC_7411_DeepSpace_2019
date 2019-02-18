@@ -49,8 +49,7 @@ public class RobotMap
       leftGrabberMotorPort(4),
       rightGrabberMotorPort(5),
       vacuumMotorPort(6),
-      rightGantryMotorPort(8),
-      leftGantryMotorPort(9);
+      gantryMotorPort(9);
 
       private int value;
 
