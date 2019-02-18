@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import frc.robot.RobotMap.PWMport;
 import frc.robot.commands.DriveManualWithJoystick;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GantrySubsystem extends Subsystem
 {
-    private VictorSP leftGantryMotor = new VictorSP(RobotMap.leftGantryMotorPort);
-    private VictorSP rightGantryMotor = new VictorSP(RobotMap.rightGantryMotorPort);
+    private VictorSP leftGantryMotor = new VictorSP(PWMport.leftGantryMotorPort.getVal());
+    private VictorSP rightGantryMotor = new VictorSP(PWMport.rightGantryMotorPort.getVal());
 
     //limit switches
     public DigitalInput leftLimitSwitch;
@@ -31,7 +31,7 @@ public class GantrySubsystem extends Subsystem
 
     public void driveGantry()
     {
-        double d2yAxis = Robot.oi.driverStick2.getRawAxis(1);
+        double d2yAxis = Robot.oi.driverStick1.getRawAxis(1);
 
         if (leftLimitSwitch.get() == true && d2yAxis > 0)
         {

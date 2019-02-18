@@ -1,43 +1,48 @@
 package frc.robot.subsystems;
 
-import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.commands.DriveManualWithJoystick;
+import frc.robot.RobotMap.PWMport;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class GrabberSubsystem extends Subsystem
 {
-    public VictorSP leftGrabberMotor = new VictorSP(RobotMap.leftGrabberMotorPort);
-    public VictorSP rightGrabberMotor = new VictorSP(RobotMap.rightGrabberMotorPort);
+   public VictorSP leftGrabberMotor = new VictorSP(PWMport.leftGrabberMotorPort.getVal());
+   public VictorSP rightGrabberMotor = new VictorSP(PWMport.rightGrabberMotorPort.getVal());
+   public enum grabberMode { grab, eject, off; }
 
-    public void initDefaultCommand() 
-    {
-        setDefaultCommand(new DriveManualWithJoystick());    
-    }
+   public void initDefaultCommand()
+   {
+      // Not needed as the GrabCargo command is already being initialized
+      // by the joystickbutton method in OI.java
+   }
 
-    public void driveGrabber()
-    {
-        if (Robot.oi.driverStick2.getRawButton(4) == true)
-        {
+
+   public void driveGrabber(grabberMode mode)
+   {
+      switch(mode)
+      {
+         case grab:
             leftGrabberMotor.set(-1.0);
             rightGrabberMotor.set(1.0);
-        }
-        else if (Robot.oi.driverStick2.getRawButton(1) == true)
-        {
+            break;
+
+         case eject:
             leftGrabberMotor.set(1.0);
             rightGrabberMotor.set(-1.0);
-        }
-        else
-        {
-            leftGrabberMotor.set(0);
-            rightGrabberMotor.set(0);
-        }
-    }
+            break;
 
-    public void stopGrabber()
-    {
-        leftGrabberMotor.set(0);
-        rightGrabberMotor.set(0);
-    }
+         case off:
+         default:
+            stopGrabber();
+            break;
+      }
+   }
+
+
+   public void stopGrabber()
+   {
+      leftGrabberMotor.set(0);
+      rightGrabberMotor.set(0);
+   }
 }

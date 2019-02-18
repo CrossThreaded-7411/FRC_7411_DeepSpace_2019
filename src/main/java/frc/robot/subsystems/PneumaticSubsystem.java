@@ -1,41 +1,44 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.hal.sim.mockdata.PCMDataJNI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.VictorSP;
-import frc.robot.RobotMap;
-import frc.robot.Robot;
-import frc.robot.commands.DriveManualWithJoystick;
+import frc.robot.RobotMap.PWMport;
+import frc.robot.commands.ToggleHatchGrabDeploy;
 
 public class PneumaticSubsystem extends Subsystem
 {
-    public Solenoid pressureRelease = new Solenoid(3, 0);
-    public VictorSP vacuum = new VictorSP(RobotMap.vacuumMotorPort);
+   public Solenoid pressureRelease = new Solenoid(3, 0);
+   public VictorSP vacuum = new VictorSP(PWMport.vacuumMotorPort.getVal());
+ 
+   private final double vacuumOff = 0.0;
+   private final double vacuumOn = 1.0;
+   
+   
+   public void initDefaultCommand()
+   {
+      // Not needed as the ToggleHatchGrabDeploy command is already being initialized
+      // by the joystickbutton method in OI.java
+   }
 
-    public void initDefaultCommand()
-    {
-        setDefaultCommand(new DriveManualWithJoystick());
-    }
 
-    public void runPneumatics()
-    {
-        boolean bumperValue = Robot.oi.driverStick2.getRawButton(5);
-        pressureRelease.set(bumperValue);
+   public void setPneumaticsForHatchGrab()
+   {
+      pressureRelease.set(false);
+      vacuum.set(vacuumOn);
+   }
 
-        if (bumperValue == true)
-        {
-            vacuum.set(0);
-        }
-        else
-        {
-            vacuum.set(1);
-        }
-    }
 
-    public void stopPneumatics()
-    {
-        pressureRelease.set(false);
-        vacuum.set(0);
-    }
+   public void setPneumaticsForHatchRelease()
+   {
+      pressureRelease.set(true);
+      vacuum.set(vacuumOff);
+   }
+
+   
+   public void stopPneumatics()
+   {
+      pressureRelease.set(false);
+      vacuum.set(vacuumOff);
+   }
 }   
