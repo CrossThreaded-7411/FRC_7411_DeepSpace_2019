@@ -65,9 +65,6 @@ public class talonLiftPID extends Subsystem
    private int hatch = -1;
    private int lastHatch = -1;
 
-   private boolean switchMode = false;
-   private boolean switchModeLast = false;
-
    double liftPosition = 0;
 
    int offset = 0;
@@ -252,16 +249,6 @@ public class talonLiftPID extends Subsystem
 
       hatch = Robot.oi.driverStick2.getPOV();
 
-      switchMode = Robot.oi.driverStick2.getRawButton(F310button.button7.getVal());
-
-      if(switchModeLast == true && switchMode == false) {
-         if(currCargoMode == cargoMode.ball) {
-            currCargoMode = cargoMode.hatch;
-         } else if(currCargoMode == cargoMode.hatch) {
-            currCargoMode = cargoMode.ball;
-         }
-      }
-
       if(lastDown == true && down == false) {
           currMode = liftMode.down;
       } else if(lastLow == true && low == false) {
@@ -285,8 +272,6 @@ public class talonLiftPID extends Subsystem
       lastMid = mid;
       lastHigh = high;
       lastHatch = hatch;
-
-      switchModeLast = switchMode;
 
       if(currCargoMode == cargoMode.hatch)
       {
