@@ -66,8 +66,8 @@ public class Robot extends TimedRobot
    UsbCamera camera;
    CvSink cvSink;
    CvSource outputStream;
-   Scalar lowerBounds = new Scalar(10,0,252);
-   Scalar upperBounds = new Scalar(50,30,255);
+   Scalar lowerBounds = new Scalar(10,0,254);
+   Scalar upperBounds = new Scalar(70,100,255);
 
    Point crop1 = new Point(60, 0);
    Point crop2 = new Point(290, 240);
@@ -77,6 +77,8 @@ public class Robot extends TimedRobot
    int mode = 0;
    int method = 1;
    int largest = 0;
+
+   public static int driveCameraFlag = 0;
 
    static Mat pic = new Mat();
    
@@ -102,8 +104,6 @@ public class Robot extends TimedRobot
       Pneumatics = new PneumaticSubsystem();
       oi = new OI();
 
-
-      
       // Create camera server to stream video to driver station
 
        Thread cameraThread = new Thread(() ->
@@ -119,7 +119,8 @@ public class Robot extends TimedRobot
          Mat orig = new Mat();
          //Mat pic = new Mat();
          Mat out = new Mat();
-         Mat rectPic = new Mat(320, 240, CvType.CV_64F);
+         //Mat rectPic = new Mat(320, 240, CvType.CV_64F);
+         Mat rectPic = new Mat();
          Point rect1 = new Point(0,0);
          Point rect2 = new Point(0,0);
          Rect rectangleBound;
@@ -133,60 +134,64 @@ public class Robot extends TimedRobot
                 outputStream.notifyError(cvSink.getError());
                 continue;
              }
-             pic = pic.submat(rectCrop);            
-      //       Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2HSV);
-      //       Core.inRange(pic, lowerBounds, upperBounds, pic);
-      //       Imgproc.findContours(pic, contours, out, mode, method);
+            pic = pic.submat(rectCrop);  
+            rectPic = pic.clone();
+            Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2HSV);
+            Core.inRange(pic, lowerBounds, upperBounds, pic);
+            Imgproc.findContours(pic, contours, out, mode, method);
 
-      //       if(contours.size() > 0){
-      //          for(int i = 0; i < contours.size() - 1; i++)
-      //          {
-      //             if(Imgproc.contourArea(contours.get(i)) > Imgproc.contourArea(contours.get(largest))) {
-      //             largest = i;
-      //             }
-      //          }
+            if(contours.size() > 0){
+               for(int i = 0; i < contours.size() - 1; i++)
+               {
+                  if(Imgproc.contourArea(contours.get(i)) > Imgproc.contourArea(contours.get(largest))) {
+                  largest = i;
+                  }
+               }
             
 
-      //          rectangleBound = Imgproc.boundingRect(contours.get(largest));
+               rectangleBound = Imgproc.boundingRect(contours.get(largest));
 
-      //          rectCoordinates1[0] = rectangleBound.x;
-      //          rectCoordinates1[1] = rectangleBound.y;
-      //          rectCoordinates2[0] = rectangleBound.x+rectangleBound.width;
-      //          rectCoordinates2[1] = rectangleBound.y+rectangleBound.height;
-      //          rect1.set(rectCoordinates1);
-      //          rect2.set(rectCoordinates2);
+               rectCoordinates1[0] = rectangleBound.x;
+               rectCoordinates1[1] = rectangleBound.y;
+               rectCoordinates2[0] = rectangleBound.x+rectangleBound.width;
+               rectCoordinates2[1] = rectangleBound.y+rectangleBound.height;
+               rect1.set(rectCoordinates1);
+               rect2.set(rectCoordinates2);
 
-      //          Imgproc.rectangle(pic, rect1, rect2, lineColor, 3);
+               Imgproc.rectangle(pic, rect1, rect2, lineColor, 3);
 
-      //          System.out.print(Imgproc.contourArea(contours.get(largest)));
-      //          System.out.print(" ");
-      //          System.out.print(rectangleBound.x + rectangleBound.width/2);
-      //          System.out.print(" ");
+               System.out.print(Imgproc.contourArea(contours.get(largest)));
+               System.out.print(" ");
+               System.out.print(rectangleBound.x + rectangleBound.width/2);
+               System.out.print(" ");
 
-      //       }
+            }
+
 
              System.out.println(run.freeMemory());
 
-         //    outputStream.putFrame(pic);
+             outputStream.putFrame(pic);
 
-         //    contours.clear();
+             contours.clear();
             
-         //    pic.setTo(zero);
+             pic.setTo(zero);
              pic.release();
-         //    out.release();
-         //    orig.release();
-         //    rectPic.setTo(zero);
-         //    rectPic.release();
-         // gcIterator++;
-         // if(gcIterator == 100) {
-         //    System.gc();
-         //    gcIterator = 0;
-         // }
+             out.setTo(zero);
+             out.release();
+             orig.release();
+             rectPic.setTo(zero);
+             rectPic.release();
+          gcIterator++;
+          if(gcIterator == 75) {
+             System.gc();
+             gcIterator = 0;
+             System.out.println("GGGGCCCC");
+          }
          // try{ 
          //    Thread.sleep(50);
          // } catch(InterruptedException e) {}
 
-          }
+         }
       });
       cameraThread.start();
 

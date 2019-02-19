@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -32,6 +33,13 @@ public class DriveManualWithJoystick extends Command
       Robot.Lift.PIDLoop();
       Robot.Lift.checkLiftButtons();
       Robot.Gantry.driveGantry();
+      // if(Robot.oi.driverStick1.getRawButton(RobotMap.Extreme3DButton.bottomOuterFrontButton.getVal()))
+      // {
+      //    Robot.driveCameraFlag = 1;
+      // } else {
+      //    Robot.driveCameraFlag = 0;
+      // }
+      // System.out.println(Robot.driveCameraFlag);
    }
 
    // Make this return true when this Command no longer needs to run execute()
