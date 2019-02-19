@@ -62,6 +62,9 @@ public class talonLiftPID extends Subsystem
    private boolean mid = false;
    private boolean high = false;
 
+   private int hatch = -1;
+   private int lastHatch = -1;
+
    private boolean switchMode = false;
    private boolean switchModeLast = false;
 
@@ -217,7 +220,18 @@ public class talonLiftPID extends Subsystem
       {
          currMode = liftMode.manual;
          stopPID();
-         liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+         if(liftPosition > 600 && liftPosition < 20800)
+         {
+            liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+         } else if(liftPosition <= 600) {
+            if(-Robot.oi.driverStick2.getRawAxis(1) > 0) {
+               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+            }
+         } else if(liftPosition >= 20800) {
+            if(-Robot.oi.driverStick2.getRawAxis(1) < 0) {
+               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+            }
+         }
          liftMotor2.set(ControlMode.Follower, 30);
          offset = (int)liftPosition;
          // Negative quadrature position is what the PID sees
@@ -235,6 +249,9 @@ public class talonLiftPID extends Subsystem
       low = Robot.oi.driverStick2.getRawButton(F310button.X_Button.getVal());
       mid = Robot.oi.driverStick2.getRawButton(F310button.Y_Button.getVal());
       high = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
+
+      hatch = Robot.oi.driverStick2.getPOV();
+
       switchMode = Robot.oi.driverStick2.getRawButton(F310button.button7.getVal());
 
       if(switchModeLast == true && switchMode == false) {
@@ -247,24 +264,28 @@ public class talonLiftPID extends Subsystem
 
       if(lastDown == true && down == false) {
           currMode = liftMode.down;
-      } else if(lastLow == true && low == false && currCargoMode == cargoMode.ball) {
+      } else if(lastLow == true && low == false) {
          currMode = liftMode.lowBall;
-      } else if(lastMid == true && mid == false && currCargoMode == cargoMode.ball) {
+      } else if(lastMid == true && mid == false) {
          currMode = liftMode.midBall;
-      } else if(lastHigh == true && high == false && currCargoMode == cargoMode.ball) {
+      } else if(lastHigh == true && high == false) {
          currMode = liftMode.highBall;
-      } else if(lastLow == true && low == false && currCargoMode == cargoMode.hatch){
+      } else if(lastHatch == -1 && hatch == 90){
          currMode = liftMode.load;
-      } else if(lastMid == true && mid == false && currCargoMode == cargoMode.hatch) {
+      } else if(lastHatch == -1 && hatch == 0) {
          currMode = liftMode.midHatch;
-      } else if(lastHigh == true & high == false && currCargoMode == cargoMode.hatch){
+      } else if(lastHatch == -1 && hatch == 270){
          currMode = liftMode.highHatch;
+      } else if(lastHatch == -1 && hatch == 180) {
+         currMode = liftMode.down;
       }
 
       lastDown = down;
       lastLow = low;
       lastMid = mid;
       lastHigh = high;
+      lastHatch = hatch;
+
       switchModeLast = switchMode;
 
       if(currCargoMode == cargoMode.hatch)

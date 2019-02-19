@@ -63,7 +63,7 @@ public class Robot extends TimedRobot
       // Create camera server to stream video to driver station
       
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
+      camera.setResolution(320, 240);
       
 
       //SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
