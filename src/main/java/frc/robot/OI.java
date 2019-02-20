@@ -19,17 +19,14 @@ public class OI
 {
    public Joystick driverStick1 = new Joystick(0);
    public Joystick driverStick2 = new Joystick(1);
+   public Joystick driverStick3 = new Joystick(2);
+   public Joystick driverStick4 = new Joystick(3);
 
-   JoystickButton cargoGrab = new JoystickButton(driverStick2, F310button.leftTrigger.getVal());
-   JoystickButton cargoEject = new JoystickButton(driverStick2, F310button.rightTrigger.getVal());
 
-   JoystickButton hatchPneumatics = new JoystickButton(driverStick2, F310button.button8.getVal());
+   JoystickButton cargoGrab = new JoystickButton(driverStick2, 1);
+   JoystickButton cargoEject = new JoystickButton(driverStick2, 2);
 
-   public JoystickButton liftDown = new JoystickButton(driverStick2, F310button.A_Button.getVal());
-   public JoystickButton liftLow = new JoystickButton(driverStick2, F310button.X_Button.getVal());
-   public JoystickButton liftMid = new JoystickButton(driverStick2, F310button.Y_Button.getVal());
-   public JoystickButton liftHigh = new JoystickButton(driverStick2, F310button.B_Button.getVal());
-
+   JoystickButton hatchPneumatics = new JoystickButton(driverStick3, 9);
 
    public OI()
    {

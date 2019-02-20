@@ -39,7 +39,7 @@ public class LiftSubsystem extends Subsystem
       calculateRelativePosition();
       cmdPID = liftPIDcontrol();
 
-      if (Math.abs(Robot.oi.driverStick2.getRawAxis(5)) <= 0.1)
+      if (Math.abs(Robot.oi.driverStick4.getRawAxis(5)) <= 0.1)
       {
          liftMotors.set(0);
       }

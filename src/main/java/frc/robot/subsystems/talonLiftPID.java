@@ -62,6 +62,16 @@ public class talonLiftPID extends Subsystem
    private boolean mid = false;
    private boolean high = false;
 
+   private boolean lastHatchDown = false;
+   private boolean lastHatchLow = false;
+   private boolean lastHatchMid = false;
+   private boolean lastHatchHigh = false;
+
+   private boolean hatchDown = false;
+   private boolean hatchLow = false;
+   private boolean hatchMid = false;
+   private boolean hatchHigh = false;
+
    private int hatch = -1;
    private int lastHatch = -1;
 
@@ -165,8 +175,6 @@ public class talonLiftPID extends Subsystem
     */
    public void PIDLoop()
    {
-      boolean bButton = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
-
       liftPosition = -1 * liftMotor1.getSensorCollection().getQuadraturePosition();
       switch(currMode) 
       {
@@ -208,7 +216,7 @@ public class talonLiftPID extends Subsystem
 
       
       SmartDashboard.putNumber("Offset", offset);
-      if (Math.abs(Robot.oi.driverStick2.getRawAxis(1)) < 0.1)
+      if (Math.abs(Robot.oi.driverStick4.getRawAxis(1)) < 0.1)
       {
          liftMotor1.set(ControlMode.Position, offset);
          liftMotor2.set(ControlMode.Follower, 30);
@@ -219,14 +227,14 @@ public class talonLiftPID extends Subsystem
          stopPID();
          if(liftPosition > 600 && liftPosition < 20800)
          {
-            liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+            liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
          } else if(liftPosition <= 600) {
-            if(-Robot.oi.driverStick2.getRawAxis(1) > 0) {
-               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+            if(-Robot.oi.driverStick4.getRawAxis(1) > 0) {
+               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
             }
          } else if(liftPosition >= 20800) {
-            if(-Robot.oi.driverStick2.getRawAxis(1) < 0) {
-               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick2.getRawAxis(1));
+            if(-Robot.oi.driverStick4.getRawAxis(1) < 0) {
+               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
             }
          }
          liftMotor2.set(ControlMode.Follower, 30);
@@ -242,12 +250,17 @@ public class talonLiftPID extends Subsystem
 
    public void checkLiftButtons() 
    {
-      down = Robot.oi.driverStick2.getRawButton(F310button.A_Button.getVal());
-      low = Robot.oi.driverStick2.getRawButton(F310button.X_Button.getVal());
-      mid = Robot.oi.driverStick2.getRawButton(F310button.Y_Button.getVal());
-      high = Robot.oi.driverStick2.getRawButton(F310button.B_Button.getVal());
+      down = Robot.oi.driverStick3.getRawButton(5);
+      low = Robot.oi.driverStick3.getRawButton(6);
+      mid = Robot.oi.driverStick3.getRawButton(7);
+      high = Robot.oi.driverStick3.getRawButton(8);
 
-      hatch = Robot.oi.driverStick2.getPOV();
+      hatchDown = Robot.oi.driverStick3.getRawButton(1);
+      hatchLow = Robot.oi.driverStick3.getRawButton(2);
+      hatchMid = Robot.oi.driverStick3.getRawButton(3);
+      hatchHigh = Robot.oi.driverStick3.getRawButton(4);
+
+
 
       if(lastDown == true && down == false) {
           currMode = liftMode.down;
@@ -257,13 +270,13 @@ public class talonLiftPID extends Subsystem
          currMode = liftMode.midBall;
       } else if(lastHigh == true && high == false) {
          currMode = liftMode.highBall;
-      } else if(lastHatch == -1 && hatch == 90){
+      } else if(lastHatchLow == true && hatchLow == false){
          currMode = liftMode.load;
-      } else if(lastHatch == -1 && hatch == 0) {
+      } else if(lastHatchMid == true && hatchMid == false) {
          currMode = liftMode.midHatch;
-      } else if(lastHatch == -1 && hatch == 270){
+      } else if(lastHatchHigh == true && hatchHigh == false){
          currMode = liftMode.highHatch;
-      } else if(lastHatch == -1 && hatch == 180) {
+      } else if(lastHatchDown == true && hatchDown == false) {
          currMode = liftMode.down;
       }
 
@@ -271,7 +284,11 @@ public class talonLiftPID extends Subsystem
       lastLow = low;
       lastMid = mid;
       lastHigh = high;
-      lastHatch = hatch;
+      lastHatchDown = hatchDown;
+      lastHatchLow = hatchLow;
+      lastHatchMid = hatchMid;
+      lastHatchHigh = hatchHigh;
+
 
       if(currCargoMode == cargoMode.hatch)
       {
