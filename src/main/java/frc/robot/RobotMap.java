@@ -37,7 +37,7 @@ public class RobotMap
    }
 
 
-   /*********************************
+   /*********************************\
     * PWM motor control mapping *
     *********************************/
    public enum PWMport

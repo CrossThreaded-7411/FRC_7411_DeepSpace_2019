@@ -6,6 +6,7 @@ import frc.robot.commands.DriveManualWithJoystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class LiftSubsystem extends Subsystem
@@ -18,6 +19,7 @@ public class LiftSubsystem extends Subsystem
    // Relative encoder position
    double encoderZeroPosition = 0.0;
    double liftPosition = 0.0;
+   public DigitalInput liftLimit = new DigitalInput(0);
 
    public void initDefaultCommand()
    {
@@ -28,6 +30,10 @@ public class LiftSubsystem extends Subsystem
    {
       stopLift();
       setEncoderZero();
+   }
+
+   public boolean getLiftLimit(){
+      return liftLimit.get();
    }
 
    // need to get encoder values and in auto set encoder values.

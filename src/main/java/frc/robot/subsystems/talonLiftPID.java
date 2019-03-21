@@ -17,7 +17,9 @@ import frc.robot.LiftPosition;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
+//import com.sun.swing.internal.plaf.basic.resources.basic;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * TODO: Add limit switch stop
@@ -38,10 +40,11 @@ public class talonLiftPID extends Subsystem
 {
    WPI_TalonSRX liftMotor1 = new WPI_TalonSRX(30);
    WPI_TalonSRX liftMotor2 = new WPI_TalonSRX(31);
+   public DigitalInput liftLimit = new DigitalInput(0);
 
    public enum liftMode 
    { 
-      down, home, lowBall, midBall, highBall, load, midHatch, highHatch, manual; 
+      down, home, lowBall, midBall, highBall, load, midHatch, highHatch, manual, override; 
    }
 
    public enum cargoMode 
@@ -176,6 +179,18 @@ public class talonLiftPID extends Subsystem
    public void PIDLoop()
    {
       liftPosition = -1 * liftMotor1.getSensorCollection().getQuadraturePosition();
+      SmartDashboard.putNumber("liftPosition", liftPosition);
+
+      if(Robot.oi.driverStick4.getRawButton(7)) {
+         currMode = liftMode.manual;
+         if(!liftLimit.get()) {
+            liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
+            liftMotor2.set(ControlMode.Follower, 30);
+         }
+         liftMotor1.setSelectedSensorPosition(0, 0, 30);
+         liftPosition = -1 * liftMotor1.getSensorCollection().getQuadraturePosition();
+         offset = (int)liftPosition;
+      }
       switch(currMode) 
       {
          case down:
@@ -225,20 +240,23 @@ public class talonLiftPID extends Subsystem
       {
          currMode = liftMode.manual;
          stopPID();
-         if(liftPosition > 600 && liftPosition < 20800)
+         if(!Robot.oi.driverStick4.getRawButton(7))
          {
-            liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
-         } else if(liftPosition <= 600) {
-            if(-Robot.oi.driverStick4.getRawAxis(1) > 0) {
+            if(liftPosition > 600 && liftPosition < 20800)
+            {
                liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
+            } else if(liftPosition <= 600) {
+               if(-Robot.oi.driverStick4.getRawAxis(1) > 0) {
+                  liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
+               }
+            } else if(liftPosition >= 20800) {
+               if(-Robot.oi.driverStick4.getRawAxis(1) < 0) {
+                  liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
+               }
             }
-         } else if(liftPosition >= 20800) {
-            if(-Robot.oi.driverStick4.getRawAxis(1) < 0) {
-               liftMotor1.set(ControlMode.PercentOutput, -Robot.oi.driverStick4.getRawAxis(1));
-            }
-         }
-         liftMotor2.set(ControlMode.Follower, 30);
-         offset = (int)liftPosition;
+            liftMotor2.set(ControlMode.Follower, 30);
+            offset = (int)liftPosition;
+         } 
          // Negative quadrature position is what the PID sees
       }
 
