@@ -8,34 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
-import frc.robot.subsystems.GrabberSubsystem.grabberMode;
 
-public class GrabCargo extends Command
-{
-   public GrabCargo()
-   {
+public class ZeroOutLiftEncoder extends Command {
+   public ZeroOutLiftEncoder() {
       // Use requires() here to declare subsystem dependencies
-      requires(Robot.Grabber);
+      // eg. requires(chassis);
    }
 
    // Called just before this Command runs the first time
    @Override
    protected void initialize()
    {
-      Robot.Grabber.stopGrabber();
    }
 
    // Called repeatedly when this Command is scheduled to run
    @Override
    protected void execute()
    {
-      if(!Robot.Grabber.ballSensor.get())
-      {
-         Robot.Grabber.driveGrabber(grabberMode.grab);
-      } else {
-         Robot.Grabber.driveGrabber(grabberMode.off);
-      }
    }
 
    // Make this return true when this Command no longer needs to run execute()
@@ -49,7 +38,6 @@ public class GrabCargo extends Command
    @Override
    protected void end()
    {
-      Robot.Grabber.stopGrabber();
    }
 
    // Called when another command which requires one or more of the same
@@ -57,6 +45,5 @@ public class GrabCargo extends Command
    @Override
    protected void interrupted()
    {
-      end();
    }
 }

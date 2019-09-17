@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.VictorSP;
 import frc.robot.RobotMap.PWMport;
-import frc.robot.commands.ToggleHatchGrabDeploy;
 
 public class PneumaticSubsystem extends Subsystem
 {

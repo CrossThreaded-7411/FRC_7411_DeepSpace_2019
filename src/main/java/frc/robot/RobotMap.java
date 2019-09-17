@@ -15,7 +15,29 @@ package frc.robot;
  */
 public class RobotMap
 {
+
    /*********************************
+    * Digital port mapping *
+    *********************************/
+   public enum digitalPorts
+   {
+      ballSensor(9);
+
+      private int value;
+
+      private digitalPorts(int value)
+      {
+         this.value = value;
+      }
+
+      public int getVal() 
+      {
+         return value;
+      }
+   }
+
+
+   /*********************************\
     * PWM motor control mapping *
     *********************************/
    public enum PWMport
@@ -27,8 +49,7 @@ public class RobotMap
       leftGrabberMotorPort(4),
       rightGrabberMotorPort(5),
       vacuumMotorPort(6),
-      rightGantryMotorPort(8),
-      leftGantryMotorPort(9);
+      gantryMotorPort(9);
 
       private int value;
 

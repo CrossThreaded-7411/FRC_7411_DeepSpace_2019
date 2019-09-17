@@ -7,7 +7,9 @@
 
 package frc.robot;
 
-//import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.cscore.UsbCamera;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -19,6 +21,7 @@ import frc.robot.subsystems.DriveTrainFourMotorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.PneumaticSubsystem;
+import frc.robot.subsystems.talonLiftPID;
 import frc.robot.subsystems.GantrySubsystem;
 
 /**
@@ -30,9 +33,9 @@ import frc.robot.subsystems.GantrySubsystem;
  */
 public class Robot extends TimedRobot
 {
-   //public static DriveTrainTwoMotorSubsystem DriveTrain;
    public static DriveTrainFourMotorSubsystem DriveTrain;
-   public static LiftSubsystem Lift;
+   //public static LiftSubsystem Lift;
+   public static talonLiftPID Lift;
    public static GrabberSubsystem Grabber;
    public static GantrySubsystem Gantry;
    public static PneumaticSubsystem Pneumatics;
@@ -50,17 +53,21 @@ public class Robot extends TimedRobot
    public void robotInit()
    {
       DriveTrain = new DriveTrainFourMotorSubsystem();
-      Lift = new LiftSubsystem();
+      //Lift = new LiftSubsystem();
+      Lift = new talonLiftPID();
       Grabber = new GrabberSubsystem();
       Gantry = new GantrySubsystem();
       Pneumatics = new PneumaticSubsystem();
       oi = new OI();
       
       // Create camera server to stream video to driver station
-      //CameraServer.getInstance().startAutomaticCapture();
+      
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera.setResolution(320, 240);
+      
 
-      SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
-      SmartDashboard.putData("Auto Mode", chooser);
+      //SmartDashboard.putData("Drive Arcade Normal  ", new DriveManualWithJoystick());
+      //SmartDashboard.putData("Auto Mode", chooser);
    }
 
 
@@ -115,6 +122,8 @@ public class Robot extends TimedRobot
          autonomousCommand.cancel();
          
       }
+      Lift.initLift();
+      Lift.resetLift();
    }
 
    /**
@@ -129,6 +138,7 @@ public class Robot extends TimedRobot
       SmartDashboard.putNumber("Left Trigger Position ", Robot.oi.getLeftTriggerPosition());
       SmartDashboard.putNumber("Right Trigger Position ", Robot.oi.getRightTriggerPosition());
       SmartDashboard.putNumber("Gantry Power", Robot.oi.getDriver2AxisY());
+      SmartDashboard.putBoolean("Ball Sensed:", Robot.Grabber.ballSensor.get());
    }
 
    /**

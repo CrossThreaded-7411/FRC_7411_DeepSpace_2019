@@ -20,7 +20,7 @@ public class DriveManualWithJoystick extends Command
    protected void initialize()
    {
       Robot.DriveTrain.driveArcadeStop();
-      Robot.Lift.stopLift();
+      Robot.Lift.initLift();
       Robot.Gantry.stopGantry();
       Robot.Gantry.init();
    }
@@ -29,7 +29,8 @@ public class DriveManualWithJoystick extends Command
    protected void execute()
    {
       Robot.DriveTrain.driveArcade();
-      Robot.Lift.driveLift();
+      Robot.Lift.PIDLoop();
+      Robot.Lift.checkLiftButtons();
       Robot.Gantry.driveGantry();
    }
 
@@ -43,8 +44,9 @@ public class DriveManualWithJoystick extends Command
    protected void end()
    {
       Robot.DriveTrain.driveArcadeStop();
-      Robot.Lift.stopLift();
+      Robot.Lift.stopPID();
       Robot.Gantry.stopGantry();
+      Robot.Lift.resetLift();
    }
 
    // Called when another command which requires one or more of the same
